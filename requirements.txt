@@ -1,0 +1,12 @@
+MetaTrader5
+pandas
+numpy
+streamlit
+plotly
+scikit-learn
+lightgbm
+joblib
+requests
+beautifulsoup4
+kaleido
+Pillow
