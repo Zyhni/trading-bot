@@ -36,13 +36,20 @@ Sistem Trading AI untuk XAUUSD yang menggabungkan analisis teknikal, fundamental
 4. Broker Account
 
 ### Installation
+1. Clone repository
 ```bash
-# 1. Clone repository
 git clone https://github.com/zyhni/trading-bot.git
+```
+```bash
 cd trading-bot
+```
 
-# 2. Install dependencies
+2. Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
-# 3. Run Program
+3. Run Program
+```bash
 streamlit run frontend_realtime.py
+```
