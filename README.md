@@ -1,4 +1,5 @@
 🏆 XAUUSD AI Trading System
+
 https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white
 https://img.shields.io/badge/MetaTrader5-00BFFF?style=for-the-badge&logo=metatrader&logoColor=white
 https://img.shields.io/badge/Ollama-7C3AED?style=for-the-badge&logo=ollama&logoColor=white
