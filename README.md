@@ -2,7 +2,7 @@
 
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
 ![MetaTrader5](https://img.shields.io/badge/MetaTrader5-00BFFF?style=for-the-badge&logo=metatrader&logoColor=white)
-![Ollama](https://img.shields.io/badge/Ollama-7C3AED?style=for-the-badge&logo=ollama&logoColor=white)
+![Ollama](https://img.shields.io/badge/GPT-7C3AED?style=for-the-badge&logo=GPT&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
 Sistem Trading AI untuk XAUUSD yang menggabungkan analisis teknikal, fundamental, berita, dan kecerdasan buatan untuk memberikan rekomendasi trading yang akurat.
