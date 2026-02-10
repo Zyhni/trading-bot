@@ -126,7 +126,7 @@ FORMAT OUTPUT:
 📈 PATTERN: [pola teridentifikasi]
 ⚡ MOMENTUM: [kekuatan momentum]
 💰 RECOMMENDATION: [BUY/SELL/HOLD] (Confidence: X%)
-🛡️ RISK MANAGEMENT: Entry: [zone], SL: [level], TP: [level], RR: [ratio]
+🛡️ RISK MANAGEMENT: Entry: [zone], SL: [level], TP: [level], RR: [ratio 1 : 2]
 
 JAWAB DALAM BAHASA INDONESIA!"""
         
