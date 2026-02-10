@@ -674,7 +674,7 @@ def main():
                         ))
 
                     fig.update_layout(template="plotly_dark", height=720)
-
+                    st.plotly_chart(fig, use_container_width=True)
                     tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
                     pio.write_image(fig, tmp.name, width=1600, height=900, scale=2)
                     img_path = tmp.name
