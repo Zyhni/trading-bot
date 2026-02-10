@@ -1,15 +1,4 @@
-"""
-frontend_realtime_tradingview.py
-
-Frontend Streamlit:
-- Menampilkan TradingView widget (chart interaktif)
-- Mengambil historical bars panjang dari TradingView via tvDatafeed (preferred)
-- Fallback ke yfinance jika tvDatafeed tidak tersedia
-- Menghitung indikator (sma/ema/rsi/atr/..) untuk analisis AI
-- Menyimpan image chart internal untuk AI Vision
-- Auto-load saat app start / saat symbol berubah (tanpa tombol Load)
-"""
-
+#frontend_realtime.py
 import os
 import random
 import string
@@ -21,6 +10,7 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 import plotly.graph_objects as go
+import plotly.io as pio
 
 from src.indicators import add_all_indicators
 from src.ai_analyzer_ferdev import get_ferdev_analyzer
@@ -674,9 +664,10 @@ def main():
 
                     fig.update_layout(template="plotly_dark", height=720)
 
-                    st.plotly_chart(fig, use_container_width=True)
-                    img_path = ""
-                    st.session_state.chart_image_path = ""
+                    tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
+                    pio.write_image(fig, tmp.name, width=1600, height=900, scale=2)
+                    img_path = tmp.name
+                    st.session_state.chart_image_path = img_path
 
                 except Exception as e:
                     st.warning(f"Failed generate chart image: {e}")
