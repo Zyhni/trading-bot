@@ -1,4 +1,3 @@
-MetaTrader5
 pandas
 numpy
 streamlit
@@ -10,3 +9,8 @@ requests
 beautifulsoup4
 kaleido
 Pillow
+yfinance 
+plotly
+kaleido
+streamlit
+git+https://github.com/rongardF/tvdatafeed.git

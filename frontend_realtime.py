@@ -641,7 +641,7 @@ def main():
     # TAB 3: AI Analysis
     # ==========================
     with tab3:
-        st.subheader("AI Analysis (Ferdev Vision)")
+        st.subheader("AI Analysis")
 
         if not st.session_state.market_data:
             st.warning("No market data.")
