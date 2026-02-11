@@ -10,6 +10,5 @@ lightgbm
 beautifulsoup4
 requests
 websockets
-playwright
 websocket-client
 git+https://github.com/rongardF/tvdatafeed.git

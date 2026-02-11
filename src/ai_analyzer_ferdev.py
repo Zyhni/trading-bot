@@ -61,17 +61,27 @@ class FerdevVisionAnalyzer:
             }
     
     def _upload_to_cdn(self, image_path: str) -> Optional[str]:
-        """Upload gambar ke CDN Catbox.moe"""
+        """Upload gambar ke CDN Catbox.moe - versi base64"""
         try:
+            if not image_path or not os.path.exists(image_path):
+                # Fallback jika file tidak ada
+                return None
+                
             with open(image_path, "rb") as f:
                 image_bytes = f.read()
             
-            files = {'fileToUpload': ('chart.png', image_bytes, 'image/png')}
-            data = {'reqtype': 'fileupload'}
+            # Convert to base64
+            import base64
+            b64_image = base64.b64encode(image_bytes).decode('utf-8')
+            
+            # Upload base64 ke Catbox
+            data = {
+                'reqtype': 'base64',
+                'fileToUpload': b64_image
+            }
             
             response = requests.post(
                 'https://catbox.moe/user/api.php',
-                files=files,
                 data=data,
                 timeout=30
             )
@@ -80,9 +90,15 @@ class FerdevVisionAnalyzer:
                 url = response.text.strip()
                 if url.startswith('http'):
                     return url
-            
+                
         except Exception as e:
             logging.error(f"CDN upload error: {e}")
+            # Coba alternatif: upload ke tempat lain
+            try:
+                # Alternatif menggunakan imgbb atau layanan lain
+                return self._upload_to_imgbb(image_path)
+            except:
+                return None
         
         return None
     

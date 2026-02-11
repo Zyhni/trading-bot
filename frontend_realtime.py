@@ -323,12 +323,46 @@ class AIChartAnalyzerFerdev:
     def __init__(self, api_key=None):
         self.analyzer = get_ferdev_analyzer(api_key or Config.FERDEV_API_KEY)
 
-    def analyze_chart(self, chart_image_path: str, market_context: str = ""):
+    def analyze_chart(self, chart_figure=None, market_context: str = ""):
+        """Terima figure plotly langsung, bukan path file"""
         try:
-            return self.analyzer.analyze_chart(
-                image_path=chart_image_path,
+            # Buat temporary file dengan permission yang aman
+            import tempfile
+            import os
+            
+            if chart_figure is None:
+                # Jika tidak ada figure, gunakan method tanpa gambar
+                return self.analyzer.analyze_chart(
+                    image_path="",
+                    market_context=market_context
+                )
+            
+            # Buat temporary directory jika belum ada
+            temp_dir = "./temp_images"
+            os.makedirs(temp_dir, exist_ok=True)
+            
+            # Generate unique filename
+            import uuid
+            filename = f"chart_{uuid.uuid4().hex}.png"
+            image_path = os.path.join(temp_dir, filename)
+            
+            # Save plotly figure
+            pio.write_image(chart_figure, image_path, width=1600, height=900, scale=2)
+            
+            # Panggil analyzer
+            result = self.analyzer.analyze_chart(
+                image_path=image_path,
                 market_context=market_context
             )
+            
+            # Hapus file setelah digunakan (opsional)
+            try:
+                os.remove(image_path)
+            except:
+                pass
+                
+            return result
+            
         except Exception as e:
             return {
                 "success": False,
@@ -635,9 +669,9 @@ def main():
         if not st.session_state.market_data:
             st.warning("No market data.")
         else:
+            # Buat figure plotly
             df_for_img = st.session_state.market_data["data"].get("H1")
-
-            img_path = None
+            
             if df_for_img is not None and not df_for_img.empty:
                 try:
                     fig = go.Figure(data=[
@@ -663,27 +697,36 @@ def main():
                         ))
 
                     fig.update_layout(template="plotly_dark", height=720)
-
-                    tmp = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-                    pio.write_image(fig, tmp.name, width=1600, height=900, scale=2)
-                    img_path = tmp.name
-                    st.session_state.chart_image_path = img_path
-
+                    
+                    # Tampilkan chart
+                    st.plotly_chart(fig, use_container_width=True)
+                    
+                    if st.session_state.ai_analysis is None:
+                        with st.spinner("AI analyzing..."):
+                            analyzer = AIChartAnalyzerFerdev()
+                            
+                            market_context = build_market_context(symbol, st.session_state.market_data)
+                            
+                            # Kirim figure langsung, bukan path file
+                            result = analyzer.analyze_chart(
+                                chart_figure=fig,  # Kirim figure plotly
+                                market_context=market_context
+                            )
+                            
+                            st.session_state.ai_analysis = result
+                            
                 except Exception as e:
-                    st.warning(f"Failed generate chart image: {e}")
-
-            if st.session_state.ai_analysis is None:
-                with st.spinner("AI analyzing..."):
-                    analyzer = AIChartAnalyzerFerdev()
-
-                    market_context = build_market_context(symbol, st.session_state.market_data)
-
-                    result = analyzer.analyze_chart(
-                        chart_image_path=img_path or "",
-                        market_context=market_context
-                    )
-
-                    st.session_state.ai_analysis = result
+                    st.warning(f"Failed generate chart: {e}")
+                    # Fallback tanpa gambar
+                    if st.session_state.ai_analysis is None:
+                        with st.spinner("AI analyzing (text only)..."):
+                            analyzer = AIChartAnalyzerFerdev()
+                            market_context = build_market_context(symbol, st.session_state.market_data)
+                            result = analyzer.analyze_chart(
+                                chart_figure=None,
+                                market_context=market_context
+                            )
+                            st.session_state.ai_analysis = result
 
             if st.session_state.ai_analysis:
                 res = st.session_state.ai_analysis
